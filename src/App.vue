@@ -1,32 +1,65 @@
 <template>
     <div class="wrapper">
 
-      <div v-if="!currentEvent">
+      <div v-if="!passengerStore.eventId">
         <h1>Skutan</h1>
-        <pre>{{currentEvent}}</pre>
 
         <div class="event-list">
           <template v-for="event in eventList">
-            <p>{{ event.data.name }}</p>
-            <button @click="chooseEvent(event)">välj</button>
+            <button @click="chooseEvent(event)">{{ event.data.name }}</button>
           </template>
         </div>
 
-        <div>
-          <input type="text" v-model="eventName">
-          <button @click="() => newEvent(eventName)">nytt event</button>
-        </div>
+        <AddEvent/>
       </div>
 
-      <div v-else>
-        <button class="return" @click="currentEvent = ''">backa</button>
+      <div v-else class="event">
+        <div class="return" @click="passengerStore.setEventId('')">
+          <img src="../public/assets/icons/back.png" height="25" width="25"/>
+          tillbaka
+        </div>
+
         <div class="headers">
-          <p class="header">Namn</p>
-          <p class="header">Båt</p>
-          <p class="header">Öl</p>
-          <p class="header">Drink</p>
-          <p class="header">Vin</p>
-          <p class="header">Läsk</p>
+          <div class="header">
+            <img src="../public/assets/icons/paddler.png" height="75" width="75"/>
+            <p>Namn</p>
+          </div>
+
+          <div class="header">
+            <img src="../public/assets/icons/boat.png" height="75" width="75"/>
+            <p>Båt 700</p>
+          </div>
+
+          <div class="header">
+            <img src="../public/assets/icons/boat.png" height="75" width="75"/>
+            <p>Båt 1000</p>
+          </div>
+
+          <div class="header">
+            <img src="../public/assets/icons/beer.png" height="75" width="75"/>
+            <p>Öl</p>
+          </div>
+
+          <div class="header">
+            <img src="../public/assets/icons/cocktail.png" height="75" width="75"/>
+            <p>Drink</p>
+          </div>
+
+          <div class="header">
+            <img src="../public/assets/icons/wine.png" height="75" width="75"/>
+            <p>Vin</p>
+          </div>
+
+          <div class="header">
+
+            <img src="../public/assets/icons/energy-drink.png" height="75" width="75"/>
+            <p>Läsk</p>
+          </div>
+
+          <div class="header">
+            <img src="../public/assets/icons/dollar-bill.png" height="75" width="75"/>
+            <p>Totalt</p>
+          </div>
         </div>
 
         <div class="passengers">
@@ -34,57 +67,74 @@
             <Passenger :passengerData="passenger.data" :passengerId="passenger.id"/>
           </template>
         </div>
-        <button @click="handleAddNewPassenger">lägg till person</button>
-        <input type="text" v-model="newPassengerName">
+        <AddPerson/>
       </div>
     </div>
 </template>
 
 <script setup>
-import {newEvent, getAllEvents, addNewPassenger, getPassengers} from "./api/firebase.js";
+import {getAllEvents} from "./api/firebase.js";
 import Passenger from "./components/Passenger.vue";
 import {onMounted, ref} from "vue";
 import {usePassengerStore} from "./stores/passengerStore.js";
+import AddPerson from "./components/AddPerson.vue";
+import AddEvent from "./components/AddEvent.vue";
 
 const passengerStore = usePassengerStore()
 
-const eventName = ref('')
 const eventList = ref([])
-
 const currentEvent = ref(null)
-
-const newPassengerName = ref('')
 
 const chooseEvent = async (event) => {
   currentEvent.value = event.id
+  passengerStore.setEventId(event.id)
 
-  // passengerList.value = await getPassengers(event.id)
   await passengerStore.getPassengerList(event.id)
 }
 
 onMounted(async () => {
   eventList.value = await getAllEvents()
 })
-
-const handleAddNewPassenger = async () => {
-  await addNewPassenger(newPassengerName.value, currentEvent.value)
-  await passengerStore.getPassengerList(currentEvent.value)
-}
-
 </script>
 
 <style scoped>
 .wrapper {
-  border: 1px solid red;
   padding: 20px;
   width: 100vw;
   max-width: 800px;
+  border: 1px solid black;
+  border-radius: 12px;
 }
+
+.event {
+  display: flex;
+  flex-direction: column;
+}
+
+.return {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: fit-content;
+  margin: 0 0 40px 0;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 4px 10px;
+
+  cursor: pointer;
+}
+
 
 .headers, .passengers {
   display: flex;
   justify-content: space-evenly;
-  border-bottom: 1px solid red;
+}
+
+.header {
+  width: 75px;
+  display: flex;
+  flex-direction: column;
 }
 
 .passengers {
@@ -93,5 +143,10 @@ const handleAddNewPassenger = async () => {
 
 .event-list {
   display: flex;
+}
+
+button {
+  background-color: #747bff;
+  color: white;
 }
 </style>

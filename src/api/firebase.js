@@ -36,7 +36,8 @@ export const addData = async (data) => {
 export const updateData = async (id, data) => {
     const docRef = await updateDoc(doc(db, "passengers", id), {
         name: data.name,
-        boat: data.boat,
+        boatSmall: data.boatSmall,
+        boatLarge: data.boatLarge,
         beer: data.beer,
         drink: data.drink,
         wine: data.wine,
