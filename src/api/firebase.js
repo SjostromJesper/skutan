@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
-import {getFirestore, collection, addDoc, getDocs, setDoc, doc, getDoc, Timestamp, where, query} from "firebase/firestore";
+import {getFirestore, collection, addDoc, getDocs, setDoc, doc, getDoc, Timestamp, where, query, updateDoc} from "firebase/firestore";
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
@@ -33,8 +33,8 @@ export const addData = async (data) => {
     }
 }
 
-export const updateData = async (data) => {
-    const docRef = await setDoc(doc(db, "event"), {
+export const updateData = async (id, data) => {
+    const docRef = await updateDoc(doc(db, "passengers", id), {
         name: data.name,
         boat: data.boat,
         beer: data.beer,

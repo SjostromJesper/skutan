@@ -30,11 +30,11 @@
         </div>
 
         <div class="passengers">
-          <template v-for="passenger in passengerList">
-            <Passenger :passengerData="passenger.data"/>
+          <template v-for="passenger in passengerStore.passengerList">
+            <Passenger :passengerData="passenger.data" :passengerId="passenger.id"/>
           </template>
         </div>
-        <button @click="addNewPassenger(newPassengerName, currentEvent)">lägg till person</button>
+        <button @click="handleAddNewPassenger">lägg till person</button>
         <input type="text" v-model="newPassengerName">
       </div>
     </div>
@@ -44,6 +44,9 @@
 import {newEvent, getAllEvents, addNewPassenger, getPassengers} from "./api/firebase.js";
 import Passenger from "./components/Passenger.vue";
 import {onMounted, ref} from "vue";
+import {usePassengerStore} from "./stores/passengerStore.js";
+
+const passengerStore = usePassengerStore()
 
 const eventName = ref('')
 const eventList = ref([])
@@ -52,20 +55,21 @@ const currentEvent = ref(null)
 
 const newPassengerName = ref('')
 
-const passengerList = ref()
-
-
 const chooseEvent = async (event) => {
-  console.log("blod")
-  console.log(event)
   currentEvent.value = event.id
 
-  passengerList.value = await getPassengers(event.id)
+  // passengerList.value = await getPassengers(event.id)
+  await passengerStore.getPassengerList(event.id)
 }
 
 onMounted(async () => {
   eventList.value = await getAllEvents()
 })
+
+const handleAddNewPassenger = async () => {
+  await addNewPassenger(newPassengerName.value, currentEvent.value)
+  await passengerStore.getPassengerList(currentEvent.value)
+}
 
 </script>
 
@@ -81,7 +85,6 @@ onMounted(async () => {
   display: flex;
   justify-content: space-evenly;
   border-bottom: 1px solid red;
-
 }
 
 .passengers {

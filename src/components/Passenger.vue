@@ -1,11 +1,14 @@
 <template>
   <div class="passenger">
+
+    <pre>{{passengerId}}</pre>
     <p class="name">{{ passengerData.name }}</p>
     <button class="item-btn" @click="passengerPurchaseList.boat++">{{ passengerPurchaseList.boat }}</button>
     <button class="item-btn" @click="passengerPurchaseList.beer++">{{ passengerPurchaseList.beer }}</button>
     <button class="item-btn" @click="passengerPurchaseList.drink++">{{ passengerPurchaseList.drink }}</button>
     <button class="item-btn" @click="passengerPurchaseList.wine++">{{ passengerPurchaseList.wine }}</button>
     <button class="item-btn" @click="passengerPurchaseList.soda++">{{ passengerPurchaseList.soda }}</button>
+    <p>{{calc.total}}</p>
   </div>
 
 </template>
@@ -15,6 +18,10 @@ import {computed, reactive, ref, watch} from "vue";
 import {updateData} from "../api/firebase.js";
 
 const props = defineProps({
+  passengerId: {
+    type: String,
+    required: true
+  },
   passengerData: {
     type: Object,
     required: true
@@ -52,7 +59,7 @@ const calc = computed(() => {
 
 watch(passengerPurchaseList, () => {
   const data = {
-    name: passenger.value,
+    name: props.passengerData.name,
     boat: {
       amount: passengerPurchaseList.boat,
       cost: calc.value.boatCost
@@ -75,7 +82,7 @@ watch(passengerPurchaseList, () => {
     }
   }
 
-  updateData(data)
+  updateData(props.passengerId, data)
 })
 
 </script>
