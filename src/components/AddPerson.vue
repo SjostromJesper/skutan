@@ -1,7 +1,7 @@
 <template>
   <div class="add-person">
     <input type="text" v-model="passengerName" placeholder="Namn..." required>
-    <button @click="handleAddNewPassenger">lägg till person</button>
+    <Button @click="handleAddNewPassenger" text="lägg till person" />
   </div>
 </template>
 
@@ -9,17 +9,27 @@
 import {addNewPassenger} from "../api/firebase.js";
 import {ref} from "vue";
 import {usePassengerStore} from "../stores/passengerStore.js";
+import Button from "./buttons/Button.vue";
 
 const passengerStore = usePassengerStore()
+
+const props = defineProps({
+  extraFunction: {
+    type: Function,
+    required: false,
+    default: null
+  }
+})
 
 const passengerName = ref('')
 const error = ref(false)
 
 const handleAddNewPassenger = async () => {
-
   if (passengerName.value.length > 0) {
     await addNewPassenger(passengerName.value, passengerStore.eventId)
     await passengerStore.getPassengerList(passengerStore.eventId)
+    props.extraFunction()
+    passengerName.value = ''
   } else {
     error.value = true
   }
@@ -32,11 +42,6 @@ const handleAddNewPassenger = async () => {
   justify-content: flex-end;
   margin: 20px;
   gap: 5px;
-}
-
-button {
-  background-color: #747bff;
-  color: white;
 }
 
 input {

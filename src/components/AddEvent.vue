@@ -1,16 +1,28 @@
 <template>
   <div class="add-event">
     <input type="text" v-model="eventName" placeholder="Namn..." required>
-    <button @click="() => newEvent(eventName)">Lägg till nytt event</button>
+    <Button text="Lägg till nytt Event" @click="handleNewEvent"/>
   </div>
 </template>
 
 <script setup>
-
 import {ref} from "vue";
 import {newEvent} from "../api/firebase.js";
+import Button from "./buttons/Button.vue";
+const props = defineProps({
+  extraFunction: {
+    type: Function,
+    required: false
+  }
+})
 
 const eventName = ref('')
+
+const handleNewEvent = () => {
+  newEvent(eventName.value)
+  props.extraFunction()
+  eventName.value = ''
+}
 </script>
 
 <style scoped>

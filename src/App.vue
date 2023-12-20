@@ -1,16 +1,21 @@
 <template>
     <div class="wrapper">
+      <Modal v-if="newEventModal" modal-title="Nytt event" :close-modal="closeNewEventModal">
+        <div class="new-event">
+          <AddEvent :extra-function="closeNewEventModal"/>
+        </div>
+      </Modal>
 
-      <div v-if="!passengerStore.eventId">
+      <div class="event-wrapper" v-if="!passengerStore.eventId">
         <h1>Skutan</h1>
 
         <div class="event-list">
           <template v-for="event in eventList">
-            <button @click="chooseEvent(event)">{{ event.data.name }}</button>
+            <Button @click="chooseEvent(event)" :text="event.data.name" />
           </template>
         </div>
 
-        <AddEvent/>
+        <Button text="Lägg till nytt event" @click="newEventModal = true"/>
       </div>
 
       <div v-else class="event">
@@ -67,7 +72,14 @@
             <Passenger :passengerData="passenger.data" :passengerId="passenger.id"/>
           </template>
         </div>
-        <AddPerson/>
+
+        <Modal v-if="addPersonModal" :close-modal="closeAddPersonModal" modal-title="Lägg till ny person">
+          <AddPerson :extra-function="closeAddPersonModal"/>
+        </Modal>
+
+        <Button text="Lägg till person" @click="addPersonModal = true"/>
+
+
       </div>
     </div>
 </template>
@@ -79,6 +91,8 @@ import {onMounted, ref} from "vue";
 import {usePassengerStore} from "./stores/passengerStore.js";
 import AddPerson from "./components/AddPerson.vue";
 import AddEvent from "./components/AddEvent.vue";
+import Modal from "./components/Modal.vue";
+import Button from "./components/buttons/Button.vue";
 
 const passengerStore = usePassengerStore()
 
@@ -95,6 +109,16 @@ const chooseEvent = async (event) => {
 onMounted(async () => {
   eventList.value = await getAllEvents()
 })
+
+const newEventModal = ref(false)
+const closeNewEventModal = () => {
+  newEventModal.value = false
+}
+
+const addPersonModal = ref(false)
+const closeAddPersonModal = () => {
+  addPersonModal.value = false
+}
 </script>
 
 <style scoped>
@@ -143,10 +167,16 @@ onMounted(async () => {
 
 .event-list {
   display: flex;
+  gap: 4px;
 }
 
 button {
-  background-color: #747bff;
-  color: white;
+  align-self: flex-end;
 }
+
+.event-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 </style>
