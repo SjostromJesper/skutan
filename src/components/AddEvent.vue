@@ -9,6 +9,10 @@
 import {ref} from "vue";
 import {newEvent} from "../api/firebase.js";
 import Button from "./buttons/Button.vue";
+import {useEventStore} from "../stores/eventStore.js";
+
+const eventStore = useEventStore()
+
 const props = defineProps({
   extraFunction: {
     type: Function,
@@ -22,6 +26,8 @@ const handleNewEvent = () => {
   newEvent(eventName.value)
   props.extraFunction()
   eventName.value = ''
+
+  eventStore.getEventList()
 }
 </script>
 

@@ -10,7 +10,7 @@
         <h1>Skutan</h1>
 
         <div class="event-list">
-          <template v-for="event in eventList">
+          <template v-for="event in eventStore.eventList">
             <Button @click="chooseEvent(event)" :text="event.data.name" />
           </template>
         </div>
@@ -89,12 +89,14 @@ import {getAllEvents} from "./api/firebase.js";
 import Passenger from "./components/Passenger.vue";
 import {onMounted, ref} from "vue";
 import {usePassengerStore} from "./stores/passengerStore.js";
+import {useEventStore} from "./stores/eventStore.js";
 import AddPerson from "./components/AddPerson.vue";
 import AddEvent from "./components/AddEvent.vue";
 import Modal from "./components/Modal.vue";
 import Button from "./components/buttons/Button.vue";
 
 const passengerStore = usePassengerStore()
+const eventStore = useEventStore()
 
 const eventList = ref([])
 const currentEvent = ref(null)

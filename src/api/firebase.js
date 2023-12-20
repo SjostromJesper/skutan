@@ -2,13 +2,14 @@ import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
 import {getFirestore, collection, addDoc, getDocs, setDoc, doc, getDoc, Timestamp, where, query, updateDoc} from "firebase/firestore";
 
+
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCqCvXP6DD1lpxtrO4sog5vhf1Zgx3bVEo",
-    authDomain: "skutan-788d7.firebaseapp.com",
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
     projectId: "skutan-788d7",
-    storageBucket: "skutan-788d7.appspot.com",
-    messagingSenderId: "585546096610",
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
     appId: "1:585546096610:web:a8999543054cb06f9de3bb",
     measurementId: "G-2R10RWV4GN"
 }
