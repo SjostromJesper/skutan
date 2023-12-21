@@ -85,7 +85,6 @@
 </template>
 
 <script setup>
-import {getAllEvents} from "./api/firebase.js";
 import Passenger from "./components/Passenger.vue";
 import {onMounted, ref} from "vue";
 import {usePassengerStore} from "./stores/passengerStore.js";
@@ -98,7 +97,6 @@ import Button from "./components/buttons/Button.vue";
 const passengerStore = usePassengerStore()
 const eventStore = useEventStore()
 
-const eventList = ref([])
 const currentEvent = ref(null)
 
 const chooseEvent = async (event) => {
@@ -109,7 +107,7 @@ const chooseEvent = async (event) => {
 }
 
 onMounted(async () => {
-  eventList.value = await getAllEvents()
+  await eventStore.getEventList()
 })
 
 const newEventModal = ref(false)
