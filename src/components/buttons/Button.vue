@@ -1,5 +1,5 @@
 <template>
-  <button>{{text}}</button>
+  <button :class="type">{{text}}</button>
 </template>
 
 <script setup>
@@ -19,9 +19,16 @@ const props = defineProps({
 
 <style scoped>
 button {
-  background-color: #747bff;
   color: white;
 
   width: fit-content;
+}
+
+.red {
+  background-color: red;
+}
+
+.primary {
+  background-color: #747bff;
 }
 </style>

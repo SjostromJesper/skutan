@@ -1,6 +1,19 @@
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
-import {getFirestore, collection, addDoc, getDocs, setDoc, doc, getDoc, Timestamp, where, query, updateDoc} from "firebase/firestore";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    setDoc,
+    doc,
+    getDoc,
+    Timestamp,
+    where,
+    query,
+    updateDoc,
+    deleteDoc
+} from "firebase/firestore";
 
 
 // TODO: Replace the following with your app's Firebase project configuration
@@ -98,6 +111,14 @@ export const addNewPassenger = async (passengerName, eventID) => {
     } catch (e) {
         console.error("Error adding document: ", e);
     }
+}
+
+export const removePassenger = async (passengerID) => {
+    await deleteDoc(doc(db, "passengers", passengerID))
+}
+
+export const removeEvent = async (eventID) => {
+    await deleteDoc(doc(db, "events", eventID))
 }
 
 export const getPassengers = async (eventID) => {

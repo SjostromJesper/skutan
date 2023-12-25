@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import {getAllEvents} from "../api/firebase.js";
+import {getAllEvents, removeEvent as rmEvent} from "../api/firebase.js";
 
 export const useEventStore = defineStore('eventData', () => {
     const eventList = ref(null)
@@ -10,8 +10,14 @@ export const useEventStore = defineStore('eventData', () => {
         eventList.value = await getAllEvents()
     )
 
+    const removeEvent = async (eventID) => {
+        await rmEvent(eventID)
+        await getEventList()
+    }
+
     return {
         eventList,
-        getEventList
+        getEventList,
+        removeEvent
     }
 })
