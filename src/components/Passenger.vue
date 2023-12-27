@@ -29,7 +29,6 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  console.log(props.passengerData)
 
   props.passengerData.boatSmall ? passengerPurchaseList.boatSmall = props.passengerData.boatSmall.amount : 0
   props.passengerData.boatLarge ? passengerPurchaseList.boatLarge = props.passengerData.boatLarge.amount : 0

@@ -13,8 +13,6 @@ export const usePassengerStore = defineStore('passengerData', () => {
     const getPassengerList = async (eventID) => {
         passengerList.value = await getPassengers(eventID)
 
-
-
         function compare( a, b ) {
             if ( a.data.date.seconds < b.data.date.seconds ){
                 return -1;
@@ -27,8 +25,6 @@ export const usePassengerStore = defineStore('passengerData', () => {
 
         passengerList.value.sort( compare );
 
-
-        // passengerList.value.sort((a,b) => (a.data.date.seconds < b.data.date.seconds) ? 1 : ((b.date.date.seconds < a.data.date.seconds) ? -1 : 0))
     }
 
 
