@@ -24,6 +24,7 @@ const props = defineProps({
 const passengerName = ref('')
 const error = ref(false)
 
+
 const handleAddNewPassenger = async () => {
   if (passengerName.value.length > 0) {
     await addNewPassenger(passengerName.value, passengerStore.eventId)

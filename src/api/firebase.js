@@ -57,7 +57,6 @@ export const updateData = async (id, data) => {
         wine: data.wine,
         soda: data.soda,
     });
-    console.log("Document written with ID: ", docRef);
 }
 
 export const readData = async () => {
@@ -100,12 +99,13 @@ export const getAllEvents = async () => {
     return data
 }
 
-export const addNewPassenger = async (passengerName, eventID) => {
+export const addNewPassenger = async (passengerName, eventID, highestPos) => {
     try {
         const docRef = await addDoc(collection(db, 'passengers'), {
             eventID: eventID,
             name: passengerName,
-            date: Timestamp.now()
+            date: Timestamp.now(),
+            pos: highestPos++
         });
         console.log("Document written with ID: ", docRef.id);
     } catch (e) {
